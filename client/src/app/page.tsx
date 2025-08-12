@@ -1,4 +1,8 @@
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { envConfig } from "../../config";
+
+console.log("check>>>", envConfig.NEXT_PUBLIC_API_ENDPOINT);
 
 export default function Home() {
   return (
@@ -24,6 +28,8 @@ export default function Home() {
             Save and see your changes instantly.
           </li>
         </ol>
+
+        <Button>Click me!</Button>
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
           <a
