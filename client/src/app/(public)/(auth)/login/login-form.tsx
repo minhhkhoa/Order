@@ -17,6 +17,10 @@ export default function LoginForm() {
     }
   })
 
+  const onSubmit = async (data: LoginBodyType) => {
+    console.log(data)
+  }
+
   return (
     <Card className='mx-auto w-[470px]'>
       <CardHeader>

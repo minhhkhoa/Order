@@ -20,6 +20,8 @@ export default function Layout({
           </Link>
           <NavItems className='text-muted-foreground transition-colors hover:text-foreground flex-shrink-0' />
         </nav>
+        
+        {/* Mobile menu */}
         <Sheet>
           <SheetTrigger asChild>
             <Button variant='outline' size='icon' className='shrink-0 md:hidden'>
