@@ -16,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useLoginMutation } from "@/queries/useAuth";
 import { toast } from "sonner";
 import { handleErrorApi } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 
 export default function LoginForm() {
   const loginMutation = useLoginMutation();
@@ -52,70 +53,77 @@ export default function LoginForm() {
   };
 
   return (
-    <Card className="mx-auto w-[470px]">
-      <CardHeader>
-        <CardTitle className="text-2xl">Đăng nhập</CardTitle>
-        <CardDescription>
-          Nhập email và mật khẩu của bạn để đăng nhập vào hệ thống
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form
-            className="space-y-3 max-w-[500px] flex-shrink-0 w-full"
-            noValidate
-            onSubmit={form.handleSubmit(onSubmit, handleErrorForm)}
-          >
-            <div className="grid gap-4">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="grid gap-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="m@example.com"
-                        required
-                        {...field}
-                      />
-                      <FormMessage />
-                    </div>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="grid gap-2">
-                      <div className="flex items-center">
-                        <Label htmlFor="password">Password</Label>
+    <div className="relative">
+      {loginMutation.isPending && (
+        <div className="absolute top-0 left-0 w-full h-full z-50 flex items-center justify-center bg-black/50">
+          <Loader2 className="w-10 h-10 text-white animate-spin" />
+        </div>
+      )}
+      <Card className="mx-auto w-[470px]">
+        <CardHeader>
+          <CardTitle className="text-2xl">Đăng nhập</CardTitle>
+          <CardDescription>
+            Nhập email và mật khẩu của bạn để đăng nhập vào hệ thống
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              className="space-y-3 max-w-[500px] flex-shrink-0 w-full"
+              noValidate
+              onSubmit={form.handleSubmit(onSubmit, handleErrorForm)}
+            >
+              <div className="grid gap-4">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="grid gap-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder="m@example.com"
+                          required
+                          {...field}
+                        />
+                        <FormMessage />
                       </div>
-                      <Input
-                        id="password"
-                        type="password"
-                        required
-                        {...field}
-                      />
-                      <FormMessage />
-                    </div>
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full">
-                Đăng nhập
-              </Button>
-              <Button variant="outline" className="w-full" type="button">
-                Đăng nhập bằng Google
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="grid gap-2">
+                        <div className="flex items-center">
+                          <Label htmlFor="password">Password</Label>
+                        </div>
+                        <Input
+                          id="password"
+                          type="password"
+                          required
+                          {...field}
+                        />
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                <Button type="submit" className="w-full">
+                  Đăng nhập
+                </Button>
+                <Button variant="outline" className="w-full" type="button">
+                  Đăng nhập bằng Google
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
