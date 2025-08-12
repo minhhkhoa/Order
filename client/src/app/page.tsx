@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { envConfig } from "../../config";
+import { envConfig } from "../config";
 
 console.log("check>>>", envConfig.NEXT_PUBLIC_API_ENDPOINT);
 
