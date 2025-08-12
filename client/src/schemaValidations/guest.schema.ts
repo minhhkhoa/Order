@@ -1,16 +1,27 @@
-import { RoleValues } from '@/constants/type'
-import { OrderSchema } from '@/schemaValidations/order.schema'
-import z from 'zod'
+import { RoleValues } from "@/constants/type";
+import { OrderSchema } from "@/schemaValidations/order.schema";
+import z from "zod";
 
 export const GuestLoginBody = z
   .object({
-    name: z.string().min(2).max(50),
-    tableNumber: z.number(),
-    token: z.string()
+    name: z
+      .string({
+        message: "Vui lòng nhập tên",
+      })
+      .min(2, {
+        message: "Tên phải có ít nhất 2 ký tự",
+      })
+      .max(50, {
+        message: "Tên không được vượt quá 50 ký tự",
+      }),
+    tableNumber: z.number({
+      message: "Số bàn phải là số",
+    }),
+    token: z.string(),
   })
-  .strict()
+  .strict();
 
-export type GuestLoginBodyType = z.TypeOf<typeof GuestLoginBody>
+export type GuestLoginBodyType = z.TypeOf<typeof GuestLoginBody>;
 
 export const GuestLoginRes = z.object({
   data: z.object({
@@ -22,30 +33,30 @@ export const GuestLoginRes = z.object({
       role: z.enum(RoleValues),
       tableNumber: z.number().nullable(),
       createdAt: z.date(),
-      updatedAt: z.date()
-    })
+      updatedAt: z.date(),
+    }),
   }),
-  message: z.string()
-})
+  message: z.string(),
+});
 
-export type GuestLoginResType = z.TypeOf<typeof GuestLoginRes>
+export type GuestLoginResType = z.TypeOf<typeof GuestLoginRes>;
 
 export const GuestCreateOrdersBody = z.array(
   z.object({
     dishId: z.number(),
-    quantity: z.number()
+    quantity: z.number(),
   })
-)
+);
 
-export type GuestCreateOrdersBodyType = z.TypeOf<typeof GuestCreateOrdersBody>
+export type GuestCreateOrdersBodyType = z.TypeOf<typeof GuestCreateOrdersBody>;
 
 export const GuestCreateOrdersRes = z.object({
   message: z.string(),
-  data: z.array(OrderSchema)
-})
+  data: z.array(OrderSchema),
+});
 
-export type GuestCreateOrdersResType = z.TypeOf<typeof GuestCreateOrdersRes>
+export type GuestCreateOrdersResType = z.TypeOf<typeof GuestCreateOrdersRes>;
 
-export const GuestGetOrdersRes = GuestCreateOrdersRes
+export const GuestGetOrdersRes = GuestCreateOrdersRes;
 
-export type GuestGetOrdersResType = z.TypeOf<typeof GuestGetOrdersRes>
+export type GuestGetOrdersResType = z.TypeOf<typeof GuestGetOrdersRes>;

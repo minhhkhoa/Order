@@ -5,10 +5,10 @@ import z from "zod";
 
 const DishSnapshotSchema = z.object({
   id: z.number(),
-  name: z.string(),
-  price: z.number(),
-  image: z.string(),
-  description: z.string(),
+  name: z.string({ message: "Vui lòng nhập tên món ăn" }),
+  price: z.number({ message: "Vui lòng nhập giá món ăn" }),
+  image: z.string({ message: "Vui lòng nhập hình ảnh món ăn" }),
+  description: z.string({ message: "Vui lòng nhập mô tả món ăn" }),
   status: z.enum(DishStatusValues),
   dishId: z.number().nullable(),
   createdAt: z.date(),
