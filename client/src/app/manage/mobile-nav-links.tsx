@@ -1,14 +1,19 @@
-'use client'
-import menuItems from '@/app/manage/menuItems'
-import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
-import { cn } from '@/lib/utils'
-import { Package2, PanelLeft } from 'lucide-react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+"use client";
+import menuItems from "@/app/manage/menuItems";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
+import { Package2, PanelLeft } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function MobileNavLinks() {
-  const pathname = usePathname()
+  const pathname = usePathname();
   return (
     <Sheet>
       <SheetTrigger asChild>
