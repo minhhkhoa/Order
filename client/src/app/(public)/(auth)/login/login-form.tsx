@@ -17,8 +17,10 @@ import { useLoginMutation } from "@/queries/useAuth";
 import { toast } from "sonner";
 import { handleErrorApi } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
+  const route = useRouter();
   const loginMutation = useLoginMutation();
   const form = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
@@ -40,6 +42,7 @@ export default function LoginForm() {
           onClick: () => console.log("Đi tới profile"),
         },
       });
+      route.push("/");
     } catch (error) {
       handleErrorApi({
         error,
