@@ -1,12 +1,42 @@
 import http from "@/lib/http";
-import { LoginBodyType, LoginResType } from "@/schemaValidations/auth.schema";
+import {
+  LoginBodyType,
+  LoginResType,
+  LogoutBodyType,
+} from "@/schemaValidations/auth.schema";
 
 const authApiRequest = {
   //- goi toi api login cua BE
   severNextLogin: (body: LoginBodyType) =>
     http.post<LoginResType>("/auth/login", body),
+
+  //- nextClient goi toi nextServer
   clientNextLogin: (body: LoginBodyType) =>
     http.post<LoginResType>("/api/auth/login", body, {
+      baseUrl: "",
+    }),
+
+  //- goi toi api logout cua BE
+  severNextLogout: (
+    body: LogoutBodyType & {
+      accessToken: string;
+    }
+  ) =>
+    http.post(
+      "/auth/logout",
+      {
+        refreshToken: body.refreshToken,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${body.accessToken}`,
+        },
+      }
+    ),
+    
+  //- nextClient goi toi nextServer
+  clientNextLogout: () =>
+    http.post("/api/auth/logout", null, {
       baseUrl: "",
     }),
 };

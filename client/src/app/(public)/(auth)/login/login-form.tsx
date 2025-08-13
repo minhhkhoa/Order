@@ -42,8 +42,7 @@ export default function LoginForm() {
           onClick: () => console.log("Đi tới profile"),
         },
       });
-      // window.location.href = "/";
-      route.push("/");
+      route.push("/manage/dashboard");
     } catch (error) {
       handleErrorApi({
         error,
