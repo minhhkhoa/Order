@@ -69,6 +69,7 @@ export default function ChangePasswordForm() {
                     <div className="grid gap-3">
                       <Label htmlFor="oldPassword">Mật khẩu cũ</Label>
                       <Input
+                        autoComplete="current-password"
                         id="oldPassword"
                         type="password"
                         className="w-full"
@@ -87,6 +88,7 @@ export default function ChangePasswordForm() {
                     <div className="grid gap-3">
                       <Label htmlFor="password">Mật khẩu mới</Label>
                       <Input
+                        autoComplete="new-password"
                         id="password"
                         type="password"
                         className="w-full"
@@ -107,6 +109,7 @@ export default function ChangePasswordForm() {
                         Nhập lại mật khẩu mới
                       </Label>
                       <Input
+                        autoComplete="new-password"
                         id="confirmPassword"
                         type="password"
                         className="w-full"
@@ -118,10 +121,12 @@ export default function ChangePasswordForm() {
                 )}
               />
               <div className=" items-center gap-2 md:ml-auto flex">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" type="reset">
                   Hủy
                 </Button>
-                <Button size="sm">Lưu thông tin</Button>
+                <Button size="sm" type="submit">
+                  Lưu thông tin
+                </Button>
               </div>
             </div>
           </CardContent>
