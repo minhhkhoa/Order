@@ -4,6 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 export const useAccountProfile = () => {
   return useQuery({
     queryKey: ["accountProfile"],
-    queryFn: () => accoutApiRequest.me(),
+    queryFn: accoutApiRequest.me,
   });
 };

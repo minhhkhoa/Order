@@ -12,8 +12,14 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useEffect, useRef, useState } from "react";
+import { useAccountProfile } from "@/queries/useAccount";
 
 export default function UpdateProfileForm() {
+  const [file, setFile] = useState<File | null>(null);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+  const { data } = useAccountProfile();
+
   const form = useForm<UpdateMeBodyType>({
     resolver: zodResolver(UpdateMeBody),
     defaultValues: {
@@ -21,6 +27,24 @@ export default function UpdateProfileForm() {
       avatar: "",
     },
   });
+
+  //- lay gia tri trong form
+  const avatar = form.watch("avatar");
+  const name = form.watch("name");
+
+  useEffect(() => {
+    //- load dữ liệu lên form khi có data
+    if (data) {
+      const { name, avatar } = data.payload.data;
+      form.reset({
+        name,
+        avatar: avatar ?? undefined,
+      });
+    }
+  }, [form, data]);
+
+  //- ban dau ko co file ảnh mới => nen previewAvatar = avatar (là ảnh hiện tại - chưa đổi ảnh)
+  const previewAvatar = file ? URL.createObjectURL(file) : avatar;
 
   return (
     <Form {...form}>
@@ -40,16 +64,27 @@ export default function UpdateProfileForm() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="flex gap-2 items-start justify-start">
-                      <Avatar className="aspect-square w-[100px] h-[100px] rounded-md object-cover">
-                        <AvatarImage src={"Duoc"} />
+                      <Avatar className="aspect-square w-[200px] h-[148px] rounded-md object-cover">
+                        <AvatarImage src={previewAvatar} />
                         <AvatarFallback className="rounded-none">
-                          {"duoc"}
+                          {name}
                         </AvatarFallback>
                       </Avatar>
-                      <input type="file" accept="image/*" className="hidden" />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        ref={avatarInputRef}
+                        onChange={(e) => {
+                          if (e.target.files?.length) {
+                            setFile(e?.target?.files[0]);
+                          }
+                        }}
+                      />
                       <button
-                        className="flex aspect-square w-[100px] items-center justify-center rounded-md border border-dashed"
+                        className="flex aspect-square mt-6 w-[100px] items-center justify-center rounded-md border border-dashed"
                         type="button"
+                        onClick={() => avatarInputRef.current?.click()}
                       >
                         <Upload className="h-4 w-4 text-muted-foreground" />
                         <span className="sr-only">Upload</span>
