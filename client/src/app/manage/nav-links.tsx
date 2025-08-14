@@ -9,10 +9,9 @@ import {
 import { cn } from "@/lib/utils";
 import { Package2, Settings } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 export default function NavLinks() {
-  const route = useRouter();
   const pathname = usePathname();
 
   return (
