@@ -29,11 +29,9 @@ export function middleware(request: NextRequest) {
     refreshToken
   ) {
     //- cho no ve page logout de thuc hien logic tra kem refreshToken ve page logout luon
-    const url = new URL("/logout", request.url);
-    url.searchParams.set(
-      "refreshToken",
-      request.cookies.get("refreshToken")?.value || ""
-    );
+    const url = new URL("/refresh-token", request.url);
+    url.searchParams.set("refreshToken", refreshToken);
+    url.searchParams.set("redirect", pathname);
     return NextResponse.redirect(url);
   }
 
