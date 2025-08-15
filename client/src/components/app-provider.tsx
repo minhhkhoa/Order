@@ -5,6 +5,7 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import RefreshToken from "./refresh-token";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,6 +27,7 @@ export default function AppProvider({
   return (
     //- Provide the client to your App
     <QueryClientProvider client={queryClient}>
+      <RefreshToken/>
       {children}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

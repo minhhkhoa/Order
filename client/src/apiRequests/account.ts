@@ -4,8 +4,10 @@ import {
   ChangePasswordBodyType,
   UpdateMeBodyType,
 } from "@/schemaValidations/account.schema";
+import { RefreshTokenResType } from "@/schemaValidations/auth.schema";
 
 const accountApiRequest = {
+
   me: () => http.get<AccountResType>("/accounts/me"),
 
   sMe: (accessToken: string) =>
