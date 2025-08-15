@@ -3,6 +3,8 @@ import {
   LoginBodyType,
   LoginResType,
   LogoutBodyType,
+  RefreshTokenBodyType,
+  RefreshTokenResType,
 } from "@/schemaValidations/auth.schema";
 
 const authApiRequest = {
@@ -33,10 +35,18 @@ const authApiRequest = {
         },
       }
     ),
-    
+
   //- nextClient goi toi nextServer
   clientNextLogout: () =>
     http.post("/api/auth/logout", null, {
+      baseUrl: "",
+    }),
+
+  serverNextRefreshToken: (body: RefreshTokenBodyType) =>
+    http.post<RefreshTokenResType>("/auth/refresh-token", body),
+
+  clientNextRefreshToken: () =>
+    http.post<RefreshTokenResType>("/api/auth/refresh-token", null, {
       baseUrl: "",
     }),
 };

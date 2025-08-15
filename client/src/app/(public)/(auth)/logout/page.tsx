@@ -1,6 +1,9 @@
 "use client";
 
-import { getRefreshTokenFromLocalStorage } from "@/lib/utils";
+import {
+  getAccessTokenFromLocalStorage,
+  getRefreshTokenFromLocalStorage,
+} from "@/lib/utils";
 import { useLogoutMutation } from "@/queries/useAuth";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useRef } from "react";
@@ -8,11 +11,18 @@ import React, { useEffect, useRef } from "react";
 export default function LogoutPage() {
   const searchParams = useSearchParams();
   const refreshTokenFromUrl = searchParams.get("refreshToken");
+  const accessTokenFromUrl = searchParams.get("accessToken");
   const { mutateAsync } = useLogoutMutation();
   const route = useRouter();
   const ref = useRef<any>(null); //- được dùng như một biến cờ (flag) để ghi nhớ trạng thái gọi API
   useEffect(() => {
-    if (ref.current || refreshTokenFromUrl != getRefreshTokenFromLocalStorage())
+    if (
+      ref.current ||
+      (refreshTokenFromUrl &&
+        refreshTokenFromUrl != getRefreshTokenFromLocalStorage()) ||
+      (accessTokenFromUrl &&
+        accessTokenFromUrl != getAccessTokenFromLocalStorage())
+    )
       return; //- Nếu đã có giá trị => tức là API đã được gọi => return
 
     ref.current = mutateAsync; //- Đánh dấu là đã gọi
@@ -23,7 +33,7 @@ export default function LogoutPage() {
 
       route.push("/login");
     });
-  }, [mutateAsync, route]);
+  }, [mutateAsync, route, refreshTokenFromUrl, accessTokenFromUrl]);
   return <div> Logout...</div>;
 }
 
