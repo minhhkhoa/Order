@@ -14,7 +14,9 @@ export function middleware(request: NextRequest) {
 
   //- chua dang nhap
   if (privatePaths.some((path) => pathname.startsWith(path)) && !refreshToken) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    const url = new URL(`/login`, request.url);
+    url.searchParams.set("clearTokens", "true");
+    return NextResponse.redirect(url);
   }
 
   //- dang nhap roi thi ko cho vao login nua

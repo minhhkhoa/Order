@@ -17,11 +17,16 @@ import { useLoginMutation } from "@/queries/useAuth";
 import { toast } from "sonner";
 import { handleErrorApi } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { useAppContext } from "@/components/app-provider";
 
 export default function LoginForm() {
   const route = useRouter();
+  const searchParams = useSearchParams();
   const loginMutation = useLoginMutation();
+  const { setIsAuth } = useAppContext();
+
   const form = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
     defaultValues: {
@@ -29,6 +34,8 @@ export default function LoginForm() {
       password: "",
     },
   });
+
+  const clearTokens = searchParams.get("clearTokens");
 
   const onSubmit = async (data: LoginBodyType) => {
     if (loginMutation.isPending) return;
@@ -54,6 +61,12 @@ export default function LoginForm() {
   const handleErrorForm = (errors: FieldErrors<LoginBodyType>) => {
     console.warn("errors submit form: ", errors);
   };
+
+  useEffect(() => {
+    if (clearTokens) {
+      setIsAuth(false);
+    }
+  }, [clearTokens, setIsAuth]);
 
   return (
     <div className="relative">
