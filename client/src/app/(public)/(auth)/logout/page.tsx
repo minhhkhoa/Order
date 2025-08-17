@@ -1,5 +1,6 @@
 "use client";
 
+import { useAppContext } from "@/components/app-provider";
 import {
   getAccessTokenFromLocalStorage,
   getRefreshTokenFromLocalStorage,
@@ -13,6 +14,7 @@ export default function LogoutPage() {
   const refreshTokenFromUrl = searchParams.get("refreshToken");
   const accessTokenFromUrl = searchParams.get("accessToken");
   const { mutateAsync } = useLogoutMutation();
+  const { setIsAuth } = useAppContext();
   const route = useRouter();
   const ref = useRef<any>(null); //- được dùng như một biến cờ (flag) để ghi nhớ trạng thái gọi API
   useEffect(() => {
@@ -31,9 +33,10 @@ export default function LogoutPage() {
         ref.current = null; //- Reset lại flag sau 1s (nếu muốn cho phép gọi lại sau này)
       }, 1000);
 
+      setIsAuth(false);
       route.push("/login");
     });
-  }, [mutateAsync, route, refreshTokenFromUrl, accessTokenFromUrl]);
+  }, [mutateAsync, route, refreshTokenFromUrl, accessTokenFromUrl, setIsAuth]);
   return <div> Logout...</div>;
 }
 

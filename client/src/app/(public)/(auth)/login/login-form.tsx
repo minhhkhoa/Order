@@ -49,6 +49,7 @@ export default function LoginForm() {
           onClick: () => console.log("Đi tới profile"),
         },
       });
+      setIsAuth(true);
       route.push("/manage/dashboard");
     } catch (error) {
       handleErrorApi({
