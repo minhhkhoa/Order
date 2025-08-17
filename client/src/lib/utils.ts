@@ -77,7 +77,7 @@ export const checkAndRefreshToken = async (param?: {
     iat: number;
   };
 
-  const now = Math.round(new Date().getTime() / 1000);
+  const now = new Date().getTime() / 1000 - 1;
 
   //- Refresh_token het han thi ko xu ly nua cho logout
   if (decodeRefreshToken.exp <= now) {
