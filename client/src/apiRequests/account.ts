@@ -1,13 +1,16 @@
 import http from "@/lib/http";
 import {
+  AccountListResType,
   AccountResType,
   ChangePasswordBodyType,
+  CreateEmployeeAccountBodyType,
+  UpdateEmployeeAccountBodyType,
   UpdateMeBodyType,
 } from "@/schemaValidations/account.schema";
-import { RefreshTokenResType } from "@/schemaValidations/auth.schema";
+
+const prefix = "/accounts";
 
 const accountApiRequest = {
-
   me: () => http.get<AccountResType>("/accounts/me"),
 
   sMe: (accessToken: string) =>
@@ -22,6 +25,20 @@ const accountApiRequest = {
 
   changePassword: (body: ChangePasswordBodyType) =>
     http.put<AccountResType>(`/accounts/change-password`, body),
+
+  list: () => http.get<AccountListResType>(`${prefix}`),
+
+  addEmployee: (body: CreateEmployeeAccountBodyType) =>
+    http.post<AccountResType>(prefix, body),
+
+  updateEmployee: (id: number, body: UpdateEmployeeAccountBodyType) =>
+    http.put<AccountResType>(`${prefix}/detail/${id}`, body),
+
+  getEmployee: (id: number) =>
+    http.get<AccountResType>(`${prefix}/detail/${id}`),
+
+  deleteEmployee: (id: number) =>
+    http.delete<AccountResType>(`${prefix}/detail/${id}`),
 };
 
 export default accountApiRequest;
