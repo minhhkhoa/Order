@@ -53,6 +53,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useSearchParams } from "next/navigation";
 import AutoPagination from "@/components/auto-pagination";
+import { useGetAccountList } from "@/queries/useAccount";
 
 type AccountItem = AccountListResType["data"][0];
 
@@ -132,7 +133,7 @@ export const columns: ColumnDef<AccountType>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={openEditEmployee}>Sửa</DropdownMenuItem>
-            <DropdownMenuItem onClick={openDeleteEmployee}>
+            <DropdownMenuItem className="hover:!text-red-600" onClick={openDeleteEmployee}>
               Xóa
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -188,7 +189,8 @@ export default function AccountTable() {
   const [employeeDelete, setEmployeeDelete] = useState<AccountItem | null>(
     null
   );
-  const data: any[] = [];
+  const accountsListQuery = useGetAccountList();
+  const data = accountsListQuery.data?.payload.data ?? [];
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
