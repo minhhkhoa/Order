@@ -122,7 +122,7 @@ export const columns: ColumnDef<AccountType>[] = [
         setEmployeeDelete(row.original);
       };
       return (
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
@@ -133,7 +133,10 @@ export const columns: ColumnDef<AccountType>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={openEditEmployee}>Sửa</DropdownMenuItem>
-            <DropdownMenuItem className="hover:!text-red-600" onClick={openDeleteEmployee}>
+            <DropdownMenuItem
+              className="hover:!text-red-600"
+              onClick={openDeleteEmployee}
+            >
               Xóa
             </DropdownMenuItem>
           </DropdownMenuContent>
