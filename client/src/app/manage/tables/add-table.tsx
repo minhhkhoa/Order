@@ -21,7 +21,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { getVietnameseTableStatus } from "@/lib/utils";
+import { getVietnameseTableStatus, handleErrorApi } from "@/lib/utils";
 import {
   CreateTableBody,
   CreateTableBodyType,
@@ -34,9 +34,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAddTableMutation } from "@/queries/useTable";
+import { toast } from "sonner";
 
 export default function AddTable() {
   const [open, setOpen] = useState(false);
+  const addTableMutation = useAddTableMutation();
   const form = useForm<CreateTableBodyType>({
     resolver: zodResolver(CreateTableBody) as Resolver<CreateTableBodyType>,
     defaultValues: {
@@ -45,6 +48,26 @@ export default function AddTable() {
       status: TableStatus.Hidden,
     },
   });
+
+  const reset = () => {
+    form.reset();
+  };
+  const onSubmit = async (values: CreateTableBodyType) => {
+    if (addTableMutation.isPending) return;
+    try {
+      const result = await addTableMutation.mutateAsync(values);
+      toast("Thông báo", {
+        description: result.payload.message,
+      });
+      reset();
+      setOpen(false);
+    } catch (error) {
+      handleErrorApi({
+        error,
+        setError: form.setError,
+      });
+    }
+  };
   return (
     <Dialog onOpenChange={setOpen} open={open}>
       <DialogTrigger asChild>
@@ -65,6 +88,10 @@ export default function AddTable() {
         <Form {...form}>
           <form
             noValidate
+            onSubmit={form.handleSubmit(onSubmit, (e) => {
+              console.log(e);
+            })}
+            onReset={reset}
             className="grid auto-rows-max items-start gap-4 md:gap-8"
             id="add-table-form"
           >

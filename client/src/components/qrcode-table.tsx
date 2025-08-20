@@ -19,14 +19,20 @@ export default function QRCodeTable({
     // Và chúng ta sẽ edit thẻ canvas thật
     // Cuối cùng thì chúng ta sẽ đưa cái thẻ canvas ảo chứa QR Code ở trên vào thẻ Canvas thật
     const canvas = canvasRef.current!;
+
+    //- xet width height
     canvas.height = width + 70;
     canvas.width = width;
     const canvasContext = canvas.getContext("2d")!;
+
+    //- do mau
     canvasContext.fillStyle = "#fff";
     canvasContext.fillRect(0, 0, canvas.width, canvas.height);
     canvasContext.font = "20px Arial";
     canvasContext.textAlign = "center";
     canvasContext.fillStyle = "#000";
+
+    //- text
     canvasContext.fillText(
       `Bàn số ${tableNumber}`,
       canvas.width / 2,
@@ -37,6 +43,8 @@ export default function QRCodeTable({
       canvas.width / 2,
       canvas.width + 50
     );
+
+    //- tao QR
     const virtalCanvas = document.createElement("canvas");
     QRCode.toCanvas(
       virtalCanvas,
