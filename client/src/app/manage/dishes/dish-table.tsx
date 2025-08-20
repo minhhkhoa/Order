@@ -50,6 +50,9 @@ import AutoPagination from "@/components/auto-pagination";
 import { DishListResType } from "@/schemaValidations/dish.schema";
 import EditDish from "@/app/manage/dishes/edit-dish";
 import AddDish from "@/app/manage/dishes/add-dish";
+import { useDishListQuery } from "@/queries/useDish";
+import DOMPurify from "dompurify";
+import "./styleTableDish.scss";
 
 type DishItem = DishListResType["data"][0];
 
@@ -86,8 +89,14 @@ export const columns: ColumnDef<DishItem>[] = [
   },
   {
     accessorKey: "name",
-    header: "Tên",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
+    header: ({ column }) => {
+      return <p className="headerName">Tên</p>;
+    },
+    cell: ({ row }) => (
+      <div className="capitalize max-w-[80%] whitespace-normal">
+        {row.getValue("name")}
+      </div>
+    ),
   },
   {
     accessorKey: "price",
@@ -98,10 +107,14 @@ export const columns: ColumnDef<DishItem>[] = [
   },
   {
     accessorKey: "description",
-    header: "Mô tả",
+    header: ({ column }) => {
+      return <p className="headerDes">Mô tả</p>;
+    },
     cell: ({ row }) => (
       <div
-        dangerouslySetInnerHTML={{ __html: row.getValue("description") }}
+        dangerouslySetInnerHTML={{
+          __html: DOMPurify.sanitize(row.getValue("description")),
+        }}
         className="whitespace-pre-line"
       />
     ),
@@ -115,6 +128,7 @@ export const columns: ColumnDef<DishItem>[] = [
   },
   {
     id: "actions",
+    header: "Hành động",
     enableHiding: false,
     cell: function Actions({ row }) {
       const { setDishIdEdit, setDishDelete } = useContext(DishTableContext);
@@ -188,7 +202,8 @@ export default function DishTable() {
   const pageIndex = page - 1;
   const [dishIdEdit, setDishIdEdit] = useState<number | undefined>();
   const [dishDelete, setDishDelete] = useState<DishItem | null>(null);
-  const data: any[] = [];
+  const dishListQuery = useDishListQuery();
+  const data = dishListQuery.data?.payload.data ?? [];
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -251,7 +266,7 @@ export default function DishTable() {
           </div>
         </div>
         <div className="rounded-md border">
-          <Table>
+          <Table className="tableDish">
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>

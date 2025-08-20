@@ -1,0 +1,9 @@
+.tableDish {
+  [data-slot="table-head"]:has(.headerDes) {
+    width: 40% !important;
+  }
+
+  [data-slot="table-head"]:has(.headerName) {
+    width: 20% !important;
+  }
+}
