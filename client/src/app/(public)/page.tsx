@@ -54,7 +54,7 @@ export default async function Home() {
               <div className="space-y-1 flex flex-col justify-evenly">
                 <h3 className="text-xl font-semibold">{dish.name}</h3>
                 <p className="line-clamp-2">{dish.description}</p>
-                <p className="font-semibold">{formatCurrency(dish.price)}</p>
+                <p className="font-semibold text-yellow-400">{formatCurrency(dish.price)}</p>
               </div>
             </div>
           ))}
