@@ -24,7 +24,7 @@ export const CreateDishBody = z.object({
     .optional(),
 });
 
-export type CreateDishBodyType = z.TypeOf<typeof CreateDishBody>;
+export type CreateDishBodyType = z.infer<typeof CreateDishBody>;
 
 export const DishSchema = z.object({
   id: z.number({ message: "ID phải là số" }),
