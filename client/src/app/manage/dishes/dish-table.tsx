@@ -44,15 +44,20 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { formatCurrency, getVietnameseDishStatus } from "@/lib/utils";
+import {
+  formatCurrency,
+  getVietnameseDishStatus,
+  handleErrorApi,
+} from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import AutoPagination from "@/components/auto-pagination";
 import { DishListResType } from "@/schemaValidations/dish.schema";
 import EditDish from "@/app/manage/dishes/edit-dish";
 import AddDish from "@/app/manage/dishes/add-dish";
-import { useDishListQuery } from "@/queries/useDish";
+import { useDeleteDishMutation, useDishListQuery } from "@/queries/useDish";
 import DOMPurify from "dompurify";
 import "./styleTableDish.scss";
+import { toast } from "sonner";
 
 type DishItem = DishListResType["data"][0];
 
@@ -151,7 +156,12 @@ export const columns: ColumnDef<DishItem>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={openEditDish}>Sửa</DropdownMenuItem>
-            <DropdownMenuItem onClick={openDeleteDish}>Xóa</DropdownMenuItem>
+            <DropdownMenuItem
+              className="hover:!bg-red-500 text-red-500"
+              onClick={openDeleteDish}
+            >
+              Xóa
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -166,6 +176,22 @@ function AlertDialogDeleteDish({
   dishDelete: DishItem | null;
   setDishDelete: (value: DishItem | null) => void;
 }) {
+  const { mutateAsync } = useDeleteDishMutation();
+  const deleteDish = async () => {
+    if (dishDelete) {
+      try {
+        const result = await mutateAsync(dishDelete.id);
+        setDishDelete(null);
+        toast("Thông báo", {
+          description: result.payload.message,
+        });
+      } catch (error) {
+        handleErrorApi({
+          error,
+        });
+      }
+    }
+  };
   return (
     <AlertDialog
       open={Boolean(dishDelete)}
@@ -188,7 +214,7 @@ function AlertDialogDeleteDish({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={deleteDish}>Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -139,7 +139,7 @@ export const columns: ColumnDef<AccountType>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={openEditEmployee}>Sửa</DropdownMenuItem>
             <DropdownMenuItem
-              className="hover:!text-red-600"
+              className="hover:!bg-red-500 text-red-500"
               onClick={openDeleteEmployee}
             >
               Xóa
