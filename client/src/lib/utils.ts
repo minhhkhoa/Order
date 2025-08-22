@@ -5,10 +5,11 @@ import { EntityError } from "./http";
 import { toast } from "sonner";
 import jwt from "jsonwebtoken";
 import authApiRequest from "@/apiRequests/auth";
-import { DishStatus, TableStatus } from "@/constants/type";
+import { DishStatus, Role, TableStatus } from "@/constants/type";
 import { envConfig } from "@/config";
 import { TokenPayload } from "@/types/jwt.types";
-
+import guestApiRequest from "@/apiRequests/guest";
+import { de } from "zod/v4/locales";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -72,14 +73,8 @@ export const checkAndRefreshToken = async (param?: {
   const refreshToken = localStorage.getItem("refreshToken");
   if (!accessToken || !refreshToken) return;
 
-  const decodeAccessToken = jwt.decode(accessToken) as {
-    exp: number;
-    iat: number;
-  };
-  const decodeRefreshToken = jwt.decode(refreshToken) as {
-    exp: number;
-    iat: number;
-  };
+  const decodeAccessToken = decodeToken(accessToken);
+  const decodeRefreshToken = decodeToken(refreshToken);
 
   const now = new Date().getTime() / 1000 - 1;
 
@@ -95,7 +90,11 @@ export const checkAndRefreshToken = async (param?: {
   ) {
     //- goi api refresh_token
     try {
-      const res = await authApiRequest.clientNextRefreshToken();
+      const role = decodeRefreshToken.role;
+      const res =
+        role === Role.Guest
+          ? await guestApiRequest.refreshToken()
+          : await authApiRequest.clientNextRefreshToken();
       setAccessTokenToLocalStorage(res.payload.data.accessToken);
       setRefreshTokenToLocalStorage(res.payload.data.refreshToken);
 
@@ -158,4 +157,3 @@ export const getTableLink = ({
 export const decodeToken = (token: string) => {
   return jwt.decode(token) as TokenPayload;
 };
-
