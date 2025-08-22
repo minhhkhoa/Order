@@ -45,7 +45,7 @@ export default function Layout({
           </SheetTrigger>
           <SheetContent side="left">
             <SheetTitle></SheetTitle>
-            <nav className="grid gap-6 text-lg font-medium">
+            <nav className="grid gap-6 text-lg font-medium ml-5">
               <Link
                 href="#"
                 className="flex items-center gap-2 text-lg font-semibold"
