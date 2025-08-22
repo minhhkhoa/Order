@@ -25,7 +25,7 @@ export default function LoginForm() {
   const route = useRouter();
   const searchParams = useSearchParams();
   const loginMutation = useLoginMutation();
-  const { setIsAuth } = useAppContext();
+  const { setRole } = useAppContext();
 
   const form = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
@@ -41,7 +41,7 @@ export default function LoginForm() {
     if (loginMutation.isPending) return;
     try {
       const result = await loginMutation.mutateAsync(data);
-      const { name } = result.payload.data.account;
+      const { name, role } = result.payload.data.account;
       toast("Đăng nhập thành công 🎉", {
         description: `Xin chào, ${name}!`,
         action: {
@@ -49,7 +49,7 @@ export default function LoginForm() {
           onClick: () => console.log("Đi tới profile"),
         },
       });
-      setIsAuth(true);
+      setRole(role);
       route.push("/manage/dashboard");
     } catch (error) {
       handleErrorApi({
@@ -65,9 +65,9 @@ export default function LoginForm() {
 
   useEffect(() => {
     if (clearTokens) {
-      setIsAuth(false);
+      setRole(undefined);
     }
-  }, [clearTokens, setIsAuth]);
+  }, [clearTokens, setRole]);
 
   return (
     <div className="relative">

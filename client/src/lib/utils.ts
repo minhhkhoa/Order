@@ -7,6 +7,8 @@ import jwt from "jsonwebtoken";
 import authApiRequest from "@/apiRequests/auth";
 import { DishStatus, TableStatus } from "@/constants/type";
 import { envConfig } from "@/config";
+import { TokenPayload } from "@/types/jwt.types";
+
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -152,3 +154,8 @@ export const getTableLink = ({
     envConfig.NEXT_PUBLIC_URL + "/tables/" + tableNumber + "?token=" + token
   );
 };
+
+export const decodeToken = (token: string) => {
+  return jwt.decode(token) as TokenPayload;
+};
+

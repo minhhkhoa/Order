@@ -14,7 +14,7 @@ function Logout() {
   const refreshTokenFromUrl = searchParams.get("refreshToken");
   const accessTokenFromUrl = searchParams.get("accessToken");
   const { mutateAsync } = useLogoutMutation();
-  const { setIsAuth } = useAppContext();
+  const { setRole } = useAppContext();
   const route = useRouter();
   const ref = useRef<any>(null); //- được dùng như một biến cờ (flag) để ghi nhớ trạng thái gọi API
   useEffect(() => {
@@ -33,10 +33,10 @@ function Logout() {
         ref.current = null; //- Reset lại flag sau 1s (nếu muốn cho phép gọi lại sau này)
       }, 1000);
 
-      setIsAuth(false);
+      setRole(undefined);
       route.push("/login");
     });
-  }, [mutateAsync, route, refreshTokenFromUrl, accessTokenFromUrl, setIsAuth]);
+  }, [mutateAsync, route, refreshTokenFromUrl, accessTokenFromUrl, setRole]);
   return <div> Logout...</div>;
 }
 
