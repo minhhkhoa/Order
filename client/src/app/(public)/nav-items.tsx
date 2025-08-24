@@ -93,7 +93,7 @@ export default function NavItems({ className }: { className?: string }) {
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>
-                Bạn có chắc chắn muốn đăng xuất
+                Bạn có chắc chắn muốn đăng xuất?
               </AlertDialogTitle>
               <AlertDialogDescription>
                 Tài khoản của bạn sẽ được đăng xuất
