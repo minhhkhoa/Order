@@ -28,13 +28,20 @@ export default function MenuOrder() {
   const handleQuantityChange = (dishId: number, quantity: number) => {
     setOrders((prevOrders) => {
       if (quantity === 0) {
+        //- slg = 0 thi xoa di order day
         return prevOrders.filter((order) => order.dishId !== dishId);
       }
+
       const index = prevOrders.findIndex((order) => order.dishId === dishId);
       if (index === -1) {
+        //- Nếu món chưa có trong giỏ → thêm mới.
         return [...prevOrders, { dishId, quantity }];
       }
+
+      //- Nếu món đã có → cập nhật lại quantity.
       const newOrders = [...prevOrders];
+
+      //- Cập nhật lai quantity cho index dang chon
       newOrders[index] = { ...newOrders[index], quantity };
       return newOrders;
     });
