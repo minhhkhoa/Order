@@ -2,13 +2,19 @@
 
 import { Badge } from "@/components/ui/badge";
 import { OrderStatus } from "@/constants/type";
+import socket from "@/lib/socket";
 import { formatCurrency, getVietnameseOrderStatus } from "@/lib/utils";
 import { useGuestGetOrderListQuery } from "@/queries/useGuest";
+import {
+  PayGuestOrdersResType,
+  UpdateOrderResType,
+} from "@/schemaValidations/order.schema";
 import Image from "next/image";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { toast } from "sonner";
 
 export default function OrdersCart() {
-  const { data } = useGuestGetOrderListQuery();
+  const { data, refetch } = useGuestGetOrderListQuery();
   const orders = useMemo(() => data?.payload.data ?? [], [data]);
   const { waitingForPaying, paid } = useMemo(() => {
     return orders.reduce(
@@ -52,6 +58,55 @@ export default function OrdersCart() {
       }
     );
   }, [orders]);
+
+  useEffect(() => {
+    if (socket?.connected) {
+      onConnect();
+    }
+
+    //- lang nghe sk connect chu thuc chat khi chay file socket.ts thi no da connect o day roi
+    function onConnect() {
+      console.log(socket?.id);
+    }
+
+    //- lang nghe sk disconnect
+    function onDisconnect() {
+      console.log("disconnect");
+    }
+
+    function onUpdateOrder(data: UpdateOrderResType["data"]) {
+      const {
+        dishSnapshot: { name },
+        quantity,
+      } = data;
+      toast("Thông báo", {
+        description: `Món ${name} (SL: ${quantity}) vừa được cập nhật sang trạng thái "${getVietnameseOrderStatus(
+          data.status
+        )}"`,
+      });
+      refetch();
+    }
+
+    function onPayment(data: PayGuestOrdersResType["data"]) {
+      const { guest } = data[0];
+      toast("Thông báo", {
+        description: `${guest?.name} tại bàn ${guest?.tableNumber} thanh toán thành công ${data.length} đơn`,
+      });
+      refetch();
+    }
+
+    socket?.on("update-order", onUpdateOrder);
+    socket?.on("payment", onPayment);
+    socket?.on("connect", onConnect);
+    socket?.on("disconnect", onDisconnect);
+
+    return () => {
+      socket?.off("connect", onConnect);
+      socket?.off("disconnect", onDisconnect);
+      socket?.off("update-order", onUpdateOrder);
+      socket?.off("payment", onPayment);
+    };
+  }, [refetch]);
 
   return (
     <>
