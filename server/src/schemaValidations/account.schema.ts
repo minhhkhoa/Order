@@ -136,7 +136,11 @@ export type GetGuestListQueryParamsType = z.TypeOf<typeof GetGuestListQueryParam
 
 export const CreateGuestBody = z
   .object({
-    name: z.string().trim().min(2).max(256),
+    name: z
+      .string({ message: 'Vui lòng nhập tên' })
+      .trim()
+      .min(2, { message: 'Tên phải có ít nhất 2 ký tự có nghĩa.' })
+      .max(256),
     tableNumber: z.number()
   })
   .strict()
