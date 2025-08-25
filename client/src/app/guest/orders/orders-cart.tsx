@@ -137,6 +137,7 @@ export default function OrdersCart() {
           </div>
         </div>
       ))}
+
       {paid.quantity !== 0 && (
         <div className="sticky bottom-0 ">
           <div className="w-full flex space-x-4 text-xl font-semibold">
@@ -145,6 +146,7 @@ export default function OrdersCart() {
           </div>
         </div>
       )}
+
       <div className="sticky bottom-0 ">
         <div className="w-full flex space-x-4 text-xl font-semibold">
           <span>Đơn chưa thanh toán · {waitingForPaying.quantity} món</span>

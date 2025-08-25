@@ -16,9 +16,6 @@ const queryClient = new QueryClient({
     queries: {
       //- refetchOnWindowFocus sẽ không tự động fetch lại api khi go back focus tab
       refetchOnWindowFocus: false,
-
-      //- refetchOnMount sẽ không tự động fetch lại api khi mount
-      refetchOnMount: false,
     },
   },
 });
