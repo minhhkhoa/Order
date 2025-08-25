@@ -141,7 +141,7 @@ export default function OrdersCart() {
         <div className="sticky bottom-0 ">
           <div className="w-full flex space-x-4 text-xl font-semibold">
             <span>Đơn đã thanh toán · {paid.quantity} món</span>
-            <span>{formatCurrency(paid.price)}</span>
+            <span className="text-green-500">{formatCurrency(paid.price)}</span>
           </div>
         </div>
       )}

@@ -117,23 +117,24 @@ export default function OrderGuestDetail({
       </div>
 
       <div className="space-x-1">
-        <span className="font-semibold">Chưa thanh toán:</span>
-        <Badge>
+        <span className="font-semibold text-green-500">Đã thanh toán:</span>
+        <Badge variant={"outline"}>
           <span>
             {formatCurrency(
-              ordersFilterToPurchase.reduce((acc, order) => {
+              purchasedOrderFilter.reduce((acc, order) => {
                 return acc + order.quantity * order.dishSnapshot.price;
               }, 0)
             )}
           </span>
         </Badge>
       </div>
+
       <div className="space-x-1">
-        <span className="font-semibold">Đã thanh toán:</span>
-        <Badge variant={"outline"}>
+        <span className="font-semibold text-yellow-400">Chưa thanh toán:</span>
+        <Badge>
           <span>
             {formatCurrency(
-              purchasedOrderFilter.reduce((acc, order) => {
+              ordersFilterToPurchase.reduce((acc, order) => {
                 return acc + order.quantity * order.dishSnapshot.price;
               }, 0)
             )}

@@ -67,7 +67,7 @@ const orderTableColumns: ColumnDef<OrderItem>[] = [
           {guest && (
             <Popover>
               <PopoverTrigger>
-                <div>
+                <div className="cursor-pointer">
                   <span>{guest.name}</span>
                   <span className="font-semibold">(#{guest.id})</span>
                 </div>
