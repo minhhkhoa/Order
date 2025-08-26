@@ -15,16 +15,31 @@ import {
   UpdateEmployeeAccountBodyType,
 } from "@/schemaValidations/account.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CloudHail, Upload } from "lucide-react";
+import { Upload } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { useForm, Resolver } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Switch } from "@/components/ui/switch";
-import { handleErrorApi } from "@/lib/utils";
 import { useGetAccount, useUpdateAccountMutation } from "@/queries/useAccount";
 import { useUploadMediaMutation } from "@/queries/useMedia";
+import { handleErrorApi } from "@/lib/utils";
+import { Role, RoleValues } from "@/constants/type";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
+import { RoleType } from "@/types/jwt.types";
 
 export default function EditEmployee({
   id,
@@ -37,8 +52,6 @@ export default function EditEmployee({
 }) {
   const [file, setFile] = useState<File | null>(null);
   const avatarInputRef = useRef<HTMLInputElement | null>(null);
-
-  //- lay data cua accout can edit
   const { data } = useGetAccount({
     id: id as number,
     enabled: Boolean(id),
@@ -47,7 +60,9 @@ export default function EditEmployee({
   const uploadMediaMutation = useUploadMediaMutation();
 
   const form = useForm<UpdateEmployeeAccountBodyType>({
-    resolver: zodResolver(UpdateEmployeeAccountBody),
+    resolver: zodResolver(
+      UpdateEmployeeAccountBody
+    ) as Resolver<UpdateEmployeeAccountBodyType>,
     defaultValues: {
       name: "",
       email: "",
@@ -55,6 +70,7 @@ export default function EditEmployee({
       password: undefined,
       confirmPassword: undefined,
       changePassword: false,
+      role: Role.Employee,
     },
   });
   const avatar = form.watch("avatar");
@@ -68,7 +84,6 @@ export default function EditEmployee({
   }, [file, avatar]);
 
   useEffect(() => {
-    //- gan gia tri len form
     if (data) {
       const { name, avatar, email, role } = data.payload.data;
       form.reset({
@@ -78,6 +93,7 @@ export default function EditEmployee({
         changePassword: form.getValues("changePassword"),
         password: form.getValues("password"),
         confirmPassword: form.getValues("confirmPassword"),
+        role: role as "Owner" | "Employee",
       });
     }
   }, [data, form]);
@@ -106,7 +122,6 @@ export default function EditEmployee({
         description: result.payload.message,
       });
       reset();
-
       if (onSubmitSuccess) onSubmitSuccess();
     } catch (error) {
       handleErrorApi({
@@ -126,7 +141,7 @@ export default function EditEmployee({
       open={Boolean(id)}
       onOpenChange={(value) => {
         if (!value) {
-          setId(undefined);
+          reset();
         }
       }}
     >
@@ -142,9 +157,7 @@ export default function EditEmployee({
             noValidate
             className="grid auto-rows-max items-start gap-4 md:gap-8"
             id="edit-employee-form"
-            onSubmit={form.handleSubmit(onSubmit, (e) => {
-              console.log("error editEmployee: ", e);
-            })}
+            onSubmit={form.handleSubmit(onSubmit, console.log)}
           >
             <div className="grid gap-4 py-4">
               <FormField
@@ -211,6 +224,40 @@ export default function EditEmployee({
                       <Label htmlFor="email">Email</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input id="email" className="w-full" {...field} />
+                        <FormMessage />
+                      </div>
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="grid grid-cols-4 items-center justify-items-start gap-4">
+                      <Label htmlFor="role">Vai trò</Label>
+                      <div className="col-span-3 w-full space-y-2">
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Chọn vai trò" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {RoleValues.map((role) => {
+                              if (role === Role.Guest) return null;
+                              return (
+                                <SelectItem key={role} value={role}>
+                                  {role}
+                                </SelectItem>
+                              );
+                            })}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </div>
                     </div>

@@ -1,18 +1,20 @@
-import { RoleValues } from "@/constants/type";
+import { Role } from "@/constants/type";
 import z from "zod";
 
-export const LoginBody = z.object({
-  email: z
-    .string({ message: "Vui lòng nhập email" })
-    .trim()
-    .email({ message: "Email không hợp lệ" }),
+export const LoginBody = z
+  .object({
+    email: z
+      .string({ message: "Vui lòng nhập email" })
+      .trim()
+      .email({ message: "Email không hợp lệ" }),
 
-  password: z
-    .string({ message: "Vui lòng nhập mật khẩu" })
-    .trim()
-    .min(6, { message: "Mật khẩu phải có ít nhất 6 ký tự" })
-    .max(100, { message: "Mật khẩu không được vượt quá 100 ký tự" }),
-});
+    password: z
+      .string({ message: "Vui lòng nhập mật khẩu" })
+      .trim()
+      .min(6, { message: "Mật khẩu phải có ít nhất 6 ký tự" })
+      .max(100, { message: "Mật khẩu không được vượt quá 100 ký tự" }),
+  })
+  .strict();
 
 export type LoginBodyType = z.TypeOf<typeof LoginBody>;
 
@@ -24,7 +26,7 @@ export const LoginRes = z.object({
       id: z.number(),
       name: z.string(),
       email: z.string(),
-      role: z.enum(RoleValues),
+      role: z.enum([Role.Owner, Role.Employee]),
     }),
   }),
   message: z.string(),
@@ -57,3 +59,9 @@ export const LogoutBody = z
   .strict();
 
 export type LogoutBodyType = z.TypeOf<typeof LogoutBody>;
+
+export const LoginGoogleQuery = z.object({
+  code: z.string(),
+});
+
+export type LoginGoogleQueryType = z.TypeOf<typeof LoginGoogleQuery>;

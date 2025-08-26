@@ -1,4 +1,4 @@
-import { RoleValues } from "@/constants/type";
+import { Role, RoleValues } from "@/constants/type";
 import z from "zod";
 
 export const AccountSchema = z.object({
@@ -90,6 +90,7 @@ export const UpdateEmployeeAccountBody = z
       .min(6, { message: "Mật khẩu phải có ít nhất 6 ký tự" })
       .max(100, { message: "Mật khẩu không được vượt quá 100 ký tự" })
       .optional(),
+    role: z.enum([Role.Owner, Role.Employee]).optional().default(Role.Employee),
   })
   .strict()
   .superRefine(({ confirmPassword, password, changePassword }, ctx) => {
