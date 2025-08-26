@@ -15,17 +15,18 @@ import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLoginMutation } from "@/queries/useAuth";
 import { toast } from "sonner";
-import { handleErrorApi } from "@/lib/utils";
+import { generateSocketInstace, handleErrorApi } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { useAppContext } from "@/components/app-provider";
+import { useAppStore } from "@/components/app-provider";
 
 export default function LoginForm() {
   const route = useRouter();
   const searchParams = useSearchParams();
   const loginMutation = useLoginMutation();
-  const { setRole } = useAppContext();
+  const setSocket = useAppStore((state) => state.setSocket);
+  const setRole = useAppStore((state) => state.setRole);
 
   const form = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
@@ -41,7 +42,7 @@ export default function LoginForm() {
     if (loginMutation.isPending) return;
     try {
       const result = await loginMutation.mutateAsync(data);
-      const { name, role } = result.payload.data.account;
+      const { name } = result.payload.data.account;
       toast("Đăng nhập thành công 🎉", {
         description: `Xin chào, ${name}!`,
         action: {
@@ -49,8 +50,9 @@ export default function LoginForm() {
           onClick: () => console.log("Đi tới profile"),
         },
       });
-      setRole(role);
+      setRole(result.payload.data.account.role);
       route.push("/manage/dashboard");
+      setSocket(generateSocketInstace(result.payload.data.accessToken));
     } catch (error) {
       handleErrorApi({
         error,

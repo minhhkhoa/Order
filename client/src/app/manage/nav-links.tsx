@@ -1,5 +1,5 @@
 "use client";
-import menuItems from "@/app/manage/menuItems";
+import { useAppStore } from "@/components/app-provider";
 import {
   Tooltip,
   TooltipContent,
@@ -10,9 +10,12 @@ import { cn } from "@/lib/utils";
 import { Package2, Settings } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import menuItems from "./menuItems";
 
 export default function NavLinks() {
   const pathname = usePathname();
+  //- lay ra role cua user
+  const role = useAppStore((state) => state.role);
 
   return (
     <TooltipProvider>
@@ -23,13 +26,14 @@ export default function NavLinks() {
             className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
           >
             <Package2 className="h-4 w-4 transition-all group-hover:scale-110" />
-
-            {/* 'sr-only': Đây là một best practice về accessibility trong UI. */}
-            <span className="sr-only">Acme Inc</span>
+            <span className="sr-only">Big Boy Restaurant</span>
           </Link>
 
           {menuItems.map((Item, index) => {
             const isActive = pathname === Item.href;
+
+            //- neu menu item khong phai role cua user thi return null
+            if (!Item.roles.includes(role as any)) return null;
             return (
               <Tooltip key={index}>
                 <TooltipTrigger asChild>

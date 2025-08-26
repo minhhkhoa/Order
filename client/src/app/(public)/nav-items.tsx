@@ -1,9 +1,9 @@
 "use client";
-
-import { useAppContext } from "@/components/app-provider";
+import { useAppStore } from "@/components/app-provider";
 import { Role } from "@/constants/type";
+import { cn, handleErrorApi } from "@/lib/utils";
+import { useLogoutMutation } from "@/queries/useAuth";
 import { RoleType } from "@/types/jwt.types";
-import Link from "next/link";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,8 +16,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
-import { useLogoutMutation } from "@/queries/useAuth";
-import { cn, handleErrorApi } from "@/lib/utils";
+import Link from "next/link";
 
 const menuItems: {
   title: string;
@@ -30,17 +29,17 @@ const menuItems: {
     href: "/",
   },
   {
-    title: "Menu",
+    title: "menu",
     href: "/guest/menu",
     role: [Role.Guest],
   },
   {
-    title: "Đơn hàng",
+    title: "orders",
     href: "/guest/orders",
     role: [Role.Guest],
   },
   {
-    title: "Đăng nhập",
+    title: "login",
     href: "/login",
     hideWhenLogin: true,
   },
@@ -51,15 +50,22 @@ const menuItems: {
   },
 ];
 
+// Server: Món ăn, Đăng nhập. Do server không biết trạng thái đăng nhập của user
+// CLient: Đầu tiên client sẽ hiển thị là Món ăn, Đăng nhập.
+// Nhưng ngay sau đó thì client render ra là Món ăn, Đơn hàng, Quản lý do đã check được trạng thái đăng nhập
+
 export default function NavItems({ className }: { className?: string }) {
-  const { role, setRole } = useAppContext();
+  const role = useAppStore((state) => state.role);
+  const setRole = useAppStore((state) => state.setRole);
+  const disconnectSocket = useAppStore((state) => state.disconnectSocket);
   const logoutMutation = useLogoutMutation();
   const router = useRouter();
   const logout = async () => {
     if (logoutMutation.isPending) return;
     try {
       await logoutMutation.mutateAsync();
-      setRole(undefined);
+      setRole();
+      disconnectSocket();
       router.push("/");
     } catch (error: any) {
       handleErrorApi({

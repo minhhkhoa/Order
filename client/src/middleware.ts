@@ -6,6 +6,7 @@ import { Role } from "./constants/type";
 
 const managePaths = ["/manage"];
 const guestPaths = ["/guest"];
+const onlyOwnerPaths = ["/manage/accounts"];
 const privatePaths = [...managePaths, ...guestPaths];
 const unAuthPaths = ["/login"];
 
@@ -54,7 +55,15 @@ export function middleware(request: NextRequest) {
       role !== Role.Guest &&
       guestPaths.some((path) => pathname.startsWith(path));
 
-    if (isGuestGoToManagePath || isNotGuestGoToGuestPath) {
+    // Không phải Owner nhưng cố tình truy cập vào các route dành cho owner
+    const isNotOwnerGoToOwnerPath =
+      role !== Role.Owner &&
+      onlyOwnerPaths.some((path) => pathname.startsWith(path));
+    if (
+      isGuestGoToManagePath ||
+      isNotGuestGoToGuestPath ||
+      isNotOwnerGoToOwnerPath
+    ) {
       return NextResponse.redirect(new URL("/", request.url));
     }
   }

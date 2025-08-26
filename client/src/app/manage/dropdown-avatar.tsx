@@ -14,22 +14,24 @@ import { useLogoutMutation } from "@/queries/useAuth";
 import { handleErrorApi } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useAccountMe } from "@/queries/useAccount";
-import { useAppContext } from "@/components/app-provider";
+import { useAppStore } from "@/components/app-provider";
 
 export default function DropdownAvatar() {
   const route = useRouter();
   const { isLoading, data } = useAccountMe();
   const account = data?.payload?.data;
   const logoutMutation = useLogoutMutation();
-  const {setRole} = useAppContext();
+  const setRole = useAppStore((state) => state.setRole);
+  const disconnectSocket = useAppStore((state) => state.disconnectSocket);
 
   const handleLogout = async () => {
     if (logoutMutation.isPending) return;
     try {
       await logoutMutation.mutateAsync();
-      setRole(undefined);
+      setRole();
+      disconnectSocket();
       route.push("/");
-    } catch (error) {
+    } catch (error: any) {
       handleErrorApi({
         error,
       });
