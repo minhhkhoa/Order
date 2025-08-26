@@ -1,7 +1,11 @@
 import { dashboardIndicatorController } from '@/controllers/indicator.controller'
 import { requireEmployeeHook, requireLoginedHook, requireOwnerHook } from '@/hooks/auth.hooks'
-import { DashboardIndicatorQueryParams, DashboardIndicatorQueryParamsType, DashboardIndicatorRes, DashboardIndicatorResType } from '@/schemaValidations/indicator.schema'
-
+import {
+  DashboardIndicatorQueryParams,
+  DashboardIndicatorQueryParamsType,
+  DashboardIndicatorRes,
+  DashboardIndicatorResType
+} from '@/schemaValidations/indicator.schema'
 import { FastifyInstance, FastifyPluginOptions } from 'fastify'
 
 export default async function indicatorRoutes(fastify: FastifyInstance, options: FastifyPluginOptions) {
