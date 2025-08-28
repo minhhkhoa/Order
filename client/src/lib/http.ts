@@ -1,5 +1,10 @@
 import { envConfig } from "@/config"; //- @ đại diện cho src
-import { normalizePath } from "@/lib/utils";
+import {
+  normalizePath,
+  removeTokensFromLocalStorage,
+  setAccessTokenToLocalStorage,
+  setRefreshTokenToLocalStorage,
+} from "@/lib/utils";
 import { LoginResType } from "@/schemaValidations/auth.schema";
 import { redirect } from "next/navigation";
 
@@ -156,13 +161,19 @@ const request = async <Response>(
     const normalizeUrl = normalizePath(url);
     if (["api/auth/login", "api/guest/auth/login"].includes(normalizeUrl)) {
       const { accessToken, refreshToken } = (payload as LoginResType).data;
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
+      setAccessTokenToLocalStorage(accessToken);
+      setRefreshTokenToLocalStorage(refreshToken);
+    } else if ("api/auth/token" === normalizeUrl) {
+      const { accessToken, refreshToken } = payload as {
+        accessToken: string;
+        refreshToken: string;
+      };
+      setAccessTokenToLocalStorage(accessToken);
+      setRefreshTokenToLocalStorage(refreshToken);
     } else if (
       ["api/auth/logout", "api/guest/auth/logout"].includes(normalizeUrl)
     ) {
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
+      removeTokensFromLocalStorage();
     }
   }
   return data;

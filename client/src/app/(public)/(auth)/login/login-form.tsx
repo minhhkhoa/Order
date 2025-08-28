@@ -20,6 +20,31 @@ import { Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useAppStore } from "@/components/app-provider";
+import { envConfig } from "@/config";
+import Link from "next/link";
+
+const getOauthGoogleUrl = () => {
+  const {
+    NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    NEXT_PUBLIC_GOOGLE_AUTHORIZED_REDIRECT_URI,
+  } = envConfig;
+  const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
+  const options = {
+    redirect_uri: NEXT_PUBLIC_GOOGLE_AUTHORIZED_REDIRECT_URI,
+    client_id: NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+    access_type: "offline",
+    response_type: "code",
+    prompt: "consent",
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email",
+    ].join(" "),
+  };
+  const qs = new URLSearchParams(options);
+  return `${rootUrl}?${qs.toString()}`;
+};
+
+const googleOAuthUrl = getOauthGoogleUrl();
 
 export default function LoginForm() {
   const route = useRouter();
@@ -135,9 +160,12 @@ export default function LoginForm() {
                 <Button type="submit" className="w-full">
                   Đăng nhập
                 </Button>
-                <Button variant="outline" className="w-full" type="button">
-                  Đăng nhập bằng Google
-                </Button>
+
+                <Link href={googleOAuthUrl}>
+                  <Button variant="outline" className="w-full" type="button">
+                    Đăng nhập bằng Google
+                  </Button>
+                </Link>
               </div>
             </form>
           </Form>

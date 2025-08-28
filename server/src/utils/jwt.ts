@@ -6,7 +6,8 @@ import ms from 'ms'
 
 export const signAccessToken = (
   payload: Pick<TokenPayload, 'userId' | 'role'> & {
-    exp?: number
+    exp?: number,
+    name?: string
   },
   options?: SignerOptions
 ) => {
@@ -30,6 +31,7 @@ export const signAccessToken = (
 export const signRefreshToken = (
   payload: Pick<TokenPayload, 'userId' | 'role'> & {
     exp?: number
+    name?: string
   },
   options?: SignerOptions
 ) => {

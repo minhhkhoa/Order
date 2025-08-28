@@ -35,7 +35,8 @@ export const guestLoginController = async (body: GuestLoginBodyType) => {
   const refreshToken = signRefreshToken(
     {
       userId: guest.id,
-      role: Role.Guest
+      role: Role.Guest,
+      name: guest.name
     },
     {
       expiresIn: ms(envConfig.GUEST_REFRESH_TOKEN_EXPIRES_IN)
@@ -44,7 +45,8 @@ export const guestLoginController = async (body: GuestLoginBodyType) => {
   const accessToken = signAccessToken(
     {
       userId: guest.id,
-      role: Role.Guest
+      role: Role.Guest,
+      name: guest.name
     },
     {
       expiresIn: ms(envConfig.GUEST_ACCESS_TOKEN_EXPIRES_IN)
@@ -93,12 +95,14 @@ export const guestRefreshTokenController = async (refreshToken: string) => {
   const newRefreshToken = signRefreshToken({
     userId: decodedRefreshToken.userId,
     role: Role.Guest,
+    name: decodedRefreshToken.name,
     exp: decodedRefreshToken.exp
   })
   const newAccessToken = signAccessToken(
     {
       userId: decodedRefreshToken.userId,
-      role: Role.Guest
+      role: Role.Guest,
+      name: decodedRefreshToken.name
     },
     {
       expiresIn: ms(envConfig.GUEST_ACCESS_TOKEN_EXPIRES_IN)

@@ -31,11 +31,13 @@ export const loginController = async (body: LoginBodyType) => {
   }
   const accessToken = signAccessToken({
     userId: account.id,
-    role: account.role as RoleType
+    role: account.role as RoleType,
+    name: account.name
   })
   const refreshToken = signRefreshToken({
     userId: account.id,
-    role: account.role as RoleType
+    role: account.role as RoleType,
+    name: account.name
   })
   const decodedRefreshToken = verifyRefreshToken(refreshToken)
   const refreshTokenExpiresAt = new Date(decodedRefreshToken.exp * 1000)
@@ -72,11 +74,13 @@ export const refreshTokenController = async (refreshToken: string) => {
   const account = refreshTokenDoc.account
   const newAccessToken = signAccessToken({
     userId: account.id,
-    role: account.role as RoleType
+    role: account.role as RoleType,
+    name: account.name
   })
   const newRefreshToken = signRefreshToken({
     userId: account.id,
     role: account.role as RoleType,
+    name: account.name,
     exp: decodedRefreshToken.exp
   })
   await prisma.refreshToken.delete({
@@ -177,11 +181,13 @@ export const loginGoogleController = async (code: string) => {
   }
   const accessToken = signAccessToken({
     userId: account.id,
-    role: account.role as RoleType
+    role: account.role as RoleType,
+    name: account.name
   })
   const refreshToken = signRefreshToken({
     userId: account.id,
-    role: account.role as RoleType
+    role: account.role as RoleType,
+    name: account.name
   })
 
   return {
