@@ -1,7 +1,8 @@
 import dishApiRequest from "@/apiRequests/dish";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, generateSlugUrl } from "@/lib/utils";
 import { DishListResType } from "@/schemaValidations/dish.schema";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function Home() {
   let dishList: DishListResType["data"] = [];
@@ -38,8 +39,15 @@ export default async function Home() {
       <section className="space-y-10 py-16">
         <h2 className="text-center text-2xl font-bold">Đa dạng các món ăn</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
-          {dishList?.map((dish) => (
-            <div className="flex gap-6" key={dish.id}>
+          {dishList.map((dish) => (
+            <Link
+              href={`/dishes/${generateSlugUrl({
+                name: dish.name,
+                id: dish.id,
+              })}`}
+              className="flex gap-4 w"
+              key={dish.id}
+            >
               <div className="flex-shrink-0">
                 <Image
                   src={dish.image}
@@ -54,9 +62,11 @@ export default async function Home() {
               <div className="space-y-1 flex flex-col justify-evenly">
                 <h3 className="text-xl font-semibold">{dish.name}</h3>
                 <p className="line-clamp-2">{dish.description}</p>
-                <p className="font-semibold text-yellow-400">{formatCurrency(dish.price)}</p>
+                <p className="font-semibold text-yellow-400">
+                  {formatCurrency(dish.price)}
+                </p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
