@@ -7,17 +7,16 @@ const getDetail = cache((id: number) =>
   wrapServerApi(() => dishApiRequest.getDish(id))
 );
 
-
 export default async function DishPage({
-  params: { slug },
+  params,
 }: {
-  params: {
-    slug: string;
-  };
+  params: { slug: string };
 }) {
+  const { slug } = await params;
   const id = getIdFromSlugUrl(slug);
-  const data = await getDetail(id);
 
+  const data = await getDetail(id);
   const dish = data?.payload?.data;
+
   return <DishDetail dish={dish} />;
 }

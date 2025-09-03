@@ -12,7 +12,7 @@ import NavItems from "@/app/(public)/nav-items";
 
 export default function Layout({
   children,
-  modal,
+  modal, //- parallel routing
 }: Readonly<{
   children: React.ReactNode;
   modal: React.ReactNode;
