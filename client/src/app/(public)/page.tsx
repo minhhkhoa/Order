@@ -3,8 +3,13 @@ import { formatCurrency, generateSlugUrl } from "@/lib/utils";
 import { DishListResType } from "@/schemaValidations/dish.schema";
 import Image from "next/image";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 export default async function Home() {
+  //- async component -> getTranslations
+  const brand = await getTranslations("Brand");
+  const homePage = await getTranslations("HomePage");
+
   let dishList: DishListResType["data"] = [];
   try {
     const result = await dishApiRequest.list();
@@ -29,15 +34,15 @@ export default async function Home() {
         />
         <div className="z-20 relative py-10 md:py-20 px-4 sm:px-10 md:px-20">
           <h1 className="text-center text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold">
-            Nhà hàng Big Boy
+            {brand("title")}
           </h1>
           <p className="text-center text-sm sm:text-base mt-4">
-            Vị ngon, trọn khoảnh khắc
+            {homePage("slogan")}
           </p>
         </div>
       </div>
       <section className="space-y-10 py-16">
-        <h2 className="text-center text-2xl font-bold">Đa dạng các món ăn</h2>
+        <h2 className="text-center text-2xl font-bold">{homePage("h2")}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
           {dishList.map((dish) => (
             <Link
@@ -73,3 +78,9 @@ export default async function Home() {
     </div>
   );
 }
+
+/**
+  Trong Next.js + next-intl, có 2 cách:
+    1. Async Component → dùng getTranslations (không dùng hook).
+    2. anywhere Component non-async → dùng useTranslations.
+ */

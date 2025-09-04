@@ -5,7 +5,7 @@ const menuItems = [
   {
     title: "Dashboard",
     Icon: Home,
-    href: "/manage/dashboard",
+    href: "/manage/dashboard1",
     roles: [Role.Owner, Role.Employee],
   },
   {
