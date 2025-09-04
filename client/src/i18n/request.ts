@@ -1,8 +1,10 @@
+import { getUserLocale } from "@/services/locale";
 import { getRequestConfig } from "next-intl/server";
 
+//- file nay tu khoi dong khi server run
 export default getRequestConfig(async () => {
   //- switch language
-  const locale = "en";
+  const locale = await getUserLocale();
 
   return {
     locale,

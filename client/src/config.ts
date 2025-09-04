@@ -21,3 +21,10 @@ if (!configProject.success) {
   throw new Error("Các giá trị khai báo trong file .env không hợp lệ");
 }
 export const envConfig = configProject.data;
+
+//- i18n
+export type Locale = (typeof locales)[number];
+
+export const locales = ["en", "vi"] as const;
+export const defaultLocale: Locale = "vi";
+//- end i18n

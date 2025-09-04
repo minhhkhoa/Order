@@ -13,6 +13,9 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    //- i18n
+    "allowArbitraryExtensions": true,
+    //- end i18n
     "plugins": [
       {
         "name": "next"
