@@ -1,7 +1,7 @@
 //- file nay chay o server
 
 import { NextResponse, NextRequest } from "next/server";
-import { decodeToken } from "./lib/utils";
+import { decodeToken } from "./lib/jwt";
 import { Role } from "./constants/type";
 
 const managePaths = ["/manage"];

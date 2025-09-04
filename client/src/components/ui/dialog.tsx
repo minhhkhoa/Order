@@ -65,6 +65,7 @@ function DialogContent({
         )}
         {...props}
       >
+        <DialogTitle></DialogTitle>
         {children}
         {showCloseButton && (
           <DialogPrimitive.Close
@@ -77,7 +78,7 @@ function DialogContent({
         )}
       </DialogPrimitive.Content>
     </DialogPortal>
-  )
+  );
 }
 
 function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {

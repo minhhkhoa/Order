@@ -68,16 +68,19 @@ export default function LoginForm() {
     try {
       const result = await loginMutation.mutateAsync(data);
       const { name } = result.payload.data.account;
-      toast("Đăng nhập thành công 🎉", {
-        description: `Xin chào, ${name}!`,
-        action: {
-          label: "Xem hồ sơ",
-          onClick: () => console.log("Đi tới profile"),
-        },
-      });
-      setRole(result.payload.data.account.role);
-      route.push("/manage/dashboard");
-      setSocket(generateSocketInstace(result.payload.data.accessToken));
+
+      if (result) {
+        toast("Đăng nhập thành công 🎉", {
+          description: `Xin chào, ${name}!`,
+          action: {
+            label: "Xem hồ sơ",
+            onClick: () => console.log("Đi tới profile"),
+          },
+        });
+        setRole(result.payload.data.account.role);
+        route.push("/manage/dashboard");
+        setSocket(generateSocketInstace(result.payload.data.accessToken));
+      }
     } catch (error) {
       handleErrorApi({
         error,

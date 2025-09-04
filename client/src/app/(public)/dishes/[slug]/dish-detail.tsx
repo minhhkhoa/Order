@@ -18,14 +18,16 @@ export default async function DishDetail({
   return (
     <div className="space-y-4">
       <h1 className="text-2xl lg:text-3xl font-semibold">{dish.name}</h1>
-      <div className="font-semibold text-yellow-400">Giá: {formatCurrency(dish.price)}</div>
+      <div className="font-semibold text-yellow-400">
+        Giá: {formatCurrency(dish.price)}
+      </div>
       <Image
         src={dish.image}
-        width={700}
-        height={700}
+        width={400}
+        height={400}
         quality={100}
         alt={dish.name}
-        className="object-cover w-full h-full max-w-[1080px] max-h-[1080px] rounded-md"
+        className="object-contain w-full h-full max-w-[400px] max-h-[400px] rounded-md"
         title={dish.name}
       />
       <p>{dish.description}</p>
