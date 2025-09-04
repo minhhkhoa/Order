@@ -14,6 +14,7 @@ const eslintConfig = [
   {
     rules: {
       "@typescript-eslint/no-explicit-any": "off", // Tắt cảnh báo type any
+      "@typescript-eslint/no-unused-vars": "off", //- tắt cảnh báo không dùng biến
     },
   },
 ];
