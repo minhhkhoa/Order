@@ -15,7 +15,6 @@ import { useLocale, useTranslations } from "next-intl";
 export default function SwitchLanguage() {
   const t = useTranslations("SwitchLanguage");
   const locale = useLocale();
-  console.log(locale);
 
   return (
     <Select
