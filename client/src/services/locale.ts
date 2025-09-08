@@ -13,6 +13,7 @@ export async function getUserLocale() {
 }
 
 export async function setUserLocale(locale: Locale) {
+  console.log(locale);
   const cookie = await cookies();
   cookie.set(COOKIE_NAME, locale);
 }

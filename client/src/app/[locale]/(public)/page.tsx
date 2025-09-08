@@ -36,6 +36,7 @@ export default async function Home({ params }: Props) {
           height={200}
           quality={100}
           alt="Banner"
+          priority
           className="absolute top-0 left-0 w-full h-full object-cover"
         />
         <div className="z-20 relative py-10 md:py-20 px-4 sm:px-10 md:px-20">
@@ -62,12 +63,12 @@ export default async function Home({ params }: Props) {
               <div className="flex-shrink-0">
                 <Image
                   src={dish.image}
-                  width={150}
+                  width={200}
                   height={150}
                   quality={80}
                   loading="lazy"
                   alt={dish.name}
-                  className="object-contain w-[200px] h-[150px] rounded-md"
+                  className="object-contain rounded-md w-[200px] h-[150px]"
                 />
               </div>
               <div className="space-y-1 flex flex-col justify-evenly">
