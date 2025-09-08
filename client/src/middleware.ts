@@ -17,6 +17,17 @@ export default function middleware(request: NextRequest) {
 
   // 1) i18n trước
   const intlRes = intlMiddleware(request);
+
+  // Nếu detect ra en từ request header (Accept-Language) nhưng chưa có cookie → ép về vi
+  if (
+    intlRes?.headers.get("Location")?.includes("/en/") &&
+    !request.cookies.get("NEXT_LOCALE")
+  ) {
+    const url = new URL(request.url);
+    url.pathname = "/vi" + url.pathname; // ép về /vi
+    return NextResponse.redirect(url);
+  }
+
   if (intlRes && (intlRes.redirected || intlRes.headers.get("Location"))) {
     return intlRes;
   }
@@ -74,7 +85,7 @@ export default function middleware(request: NextRequest) {
     }
   }
 
-  return NextResponse.next();
+  return intlRes ?? NextResponse.next();
 }
 
 export const config = {
