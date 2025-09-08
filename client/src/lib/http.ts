@@ -150,12 +150,10 @@ const request = async <Response>(
         const accessToken = (options?.headers as any)?.Authorization.split(
           "Bearer "
         )[1];
-        const locale = window.location.pathname.split("/")[1];
-        console.log("locale:",locale);
         // redirect(`/logout?accessToken=${accessToken}`);
         redirect({
           href: `/logout?accessToken=${accessToken}`,
-          locale: locale,
+          locale: 'vi',
         });
       }
     } else {
