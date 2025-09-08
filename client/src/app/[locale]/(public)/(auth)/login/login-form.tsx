@@ -17,11 +17,11 @@ import { useLoginMutation } from "@/queries/useAuth";
 import { toast } from "sonner";
 import { generateSocketInstace, handleErrorApi } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useAppStore } from "@/components/app-provider";
 import { envConfig } from "@/config";
-import Link from "next/link";
+import { Link, useRouter } from "@/i18n/navigation";
 
 const getOauthGoogleUrl = () => {
   const {
@@ -78,7 +78,7 @@ export default function LoginForm() {
           },
         });
         setRole(result.payload.data.account.role);
-        route.push("/manage/dashboard");
+        route.push("/manage/dashboard1");
         setSocket(generateSocketInstace(result.payload.data.accessToken));
       }
     } catch (error) {

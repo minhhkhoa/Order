@@ -1,4 +1,5 @@
 import { envConfig } from "@/config"; //- @ đại diện cho src
+import { redirect } from "@/i18n/navigation";
 import {
   normalizePath,
   removeTokensFromLocalStorage,
@@ -6,7 +7,6 @@ import {
   setRefreshTokenToLocalStorage,
 } from "@/lib/utils";
 import { LoginResType } from "@/schemaValidations/auth.schema";
-import { redirect } from "next/navigation";
 
 type CustomOptions = Omit<RequestInit, "method"> & {
   baseUrl?: string | undefined;
@@ -150,7 +150,13 @@ const request = async <Response>(
         const accessToken = (options?.headers as any)?.Authorization.split(
           "Bearer "
         )[1];
-        redirect(`/logout?accessToken=${accessToken}`);
+        const locale = window.location.pathname.split("/")[1];
+        console.log("locale:",locale);
+        // redirect(`/logout?accessToken=${accessToken}`);
+        redirect({
+          href: `/logout?accessToken=${accessToken}`,
+          locale: locale,
+        });
       }
     } else {
       throw new HttpError(data);

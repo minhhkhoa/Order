@@ -2,7 +2,7 @@
 
 import { useAppStore } from "@/components/app-provider";
 import { checkAndRefreshToken } from "@/lib/utils";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter, usePathname } from "@/i18n/navigation";
 import { useEffect } from "react";
 
 // Những page sau sẽ không check refesh token

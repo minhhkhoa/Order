@@ -7,7 +7,7 @@ import { useMemo, useState } from "react";
 import { GuestCreateOrdersBodyType } from "@/schemaValidations/guest.schema";
 import { useGuestOrderMutation } from "@/queries/useGuest";
 import { DishStatus } from "@/constants/type";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import Quantity from "./quantity";
 
 export default function MenuOrder() {

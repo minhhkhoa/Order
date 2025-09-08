@@ -4,8 +4,10 @@ import {
   checkAndRefreshToken,
   getRefreshTokenFromLocalStorage,
 } from "@/lib/utils";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
+import { useRouter } from "@/i18n/navigation";
+
 
 function RefreshToken() {
   const router = useRouter();
