@@ -6,11 +6,12 @@ import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import { setRequestLocale } from "next-intl/server";
 import NotiLogin from "@/components/notiLogin";
+import { Suspense } from "react";
 
-type Props = {
+export type PropsParamsI18n = {
   params: Promise<{ locale: string }>;
 };
-export default async function Home({ params }: Props) {
+export default async function Home({ params }: PropsParamsI18n) {
   const { locale } = await params;
   setRequestLocale(locale);
   //- async component -> getTranslations
@@ -84,7 +85,9 @@ export default async function Home({ params }: Props) {
         </div>
       </section>
 
-      <NotiLogin />
+      <Suspense fallback={<div>Loading...</div>}>
+        <NotiLogin />
+      </Suspense>
     </div>
   );
 }

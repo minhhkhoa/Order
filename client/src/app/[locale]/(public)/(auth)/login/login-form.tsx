@@ -22,6 +22,7 @@ import { useEffect, useTransition } from "react";
 import { useAppStore } from "@/components/app-provider";
 import { envConfig } from "@/config";
 import { Link, useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 const getOauthGoogleUrl = () => {
   const {
@@ -53,6 +54,8 @@ export default function LoginForm() {
   const setSocket = useAppStore((state) => state.setSocket);
   const setRole = useAppStore((state) => state.setRole);
   const [isPending, startTransition] = useTransition();
+
+  const login = useTranslations("Login");
 
   const form = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
@@ -108,10 +111,8 @@ export default function LoginForm() {
       )}
       <Card className="mx-auto w-[470px]">
         <CardHeader>
-          <CardTitle className="text-2xl">Đăng nhập</CardTitle>
-          <CardDescription>
-            Nhập email và mật khẩu của bạn để đăng nhập vào hệ thống
-          </CardDescription>
+          <CardTitle className="text-2xl">{login("title")}</CardTitle>
+          <CardDescription>{login("cardDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -161,12 +162,12 @@ export default function LoginForm() {
                   )}
                 />
                 <Button type="submit" className="w-full">
-                  Đăng nhập
+                  {login("title")}
                 </Button>
 
                 <Link href={googleOAuthUrl}>
                   <Button variant="outline" className="w-full" type="button">
-                    Đăng nhập bằng Google
+                    {login("loginWithGoogle")}
                   </Button>
                 </Link>
               </div>
