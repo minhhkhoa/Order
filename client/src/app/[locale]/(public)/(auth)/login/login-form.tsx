@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,11 +15,10 @@ import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { LoginBody, LoginBodyType } from "@/schemaValidations/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLoginMutation } from "@/queries/useAuth";
-import { toast } from "sonner";
 import { generateSocketInstace, handleErrorApi } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useTransition } from "react";
 import { useAppStore } from "@/components/app-provider";
 import { envConfig } from "@/config";
 import { Link, useRouter } from "@/i18n/navigation";
@@ -47,11 +47,12 @@ const getOauthGoogleUrl = () => {
 const googleOAuthUrl = getOauthGoogleUrl();
 
 export default function LoginForm() {
-  const route = useRouter();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const loginMutation = useLoginMutation();
   const setSocket = useAppStore((state) => state.setSocket);
   const setRole = useAppStore((state) => state.setRole);
+  const [isPending, startTransition] = useTransition();
 
   const form = useForm<LoginBodyType>({
     resolver: zodResolver(LoginBody),
@@ -70,15 +71,14 @@ export default function LoginForm() {
       const { name } = result.payload.data.account;
 
       if (result) {
-        toast("Đăng nhập thành công 🎉", {
-          description: `Xin chào, ${name}!`,
-          action: {
-            label: "Xem hồ sơ",
-            onClick: () => console.log("Đi tới profile"),
-          },
-        });
         setRole(result.payload.data.account.role);
-        route.push("/manage/dashboard1");
+
+        const params = new URLSearchParams({ loginSuccess: "1", name });
+
+        //- đẩy router trong transition → isPending sẽ true cho đến khi / render xong
+        startTransition(() => {
+          router.push(`/?${params}`);
+        });
         setSocket(generateSocketInstace(result.payload.data.accessToken));
       }
     } catch (error) {
@@ -101,7 +101,7 @@ export default function LoginForm() {
 
   return (
     <div className="relative">
-      {loginMutation.isPending && (
+      {isPending && (
         <div className="absolute top-0 left-0 w-full h-full z-50 flex items-center justify-center bg-black/50">
           <Loader2 className="w-10 h-10 text-white animate-spin" />
         </div>

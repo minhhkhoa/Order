@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import { setRequestLocale } from "next-intl/server";
+import NotiLogin from "@/components/notiLogin";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -82,6 +83,8 @@ export default async function Home({ params }: Props) {
           ))}
         </div>
       </section>
+
+      <NotiLogin />
     </div>
   );
 }
